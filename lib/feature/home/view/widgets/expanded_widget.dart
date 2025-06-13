@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mind_bridge/feature/learn_alphabets/view/learn_alphabet_view.dart';
 import 'package:mind_bridge/feature/orientation_test/view/orientation_view.dart';
+import 'package:mind_bridge/feature/practice_speaking/view/practice_speaking.dart';
 import 'package:mind_bridge/feature/text_reconization/view/text_view.dart';
 import '../../model/image_data.dart';
 
@@ -313,6 +314,14 @@ class _ExpandedContentWidgetState extends State<ExpandedContentWidget> with Sing
                   //   Navigator.push(...)
                   } else if (widget.location.name == 'PRACTICE SPEAKING') {
                   //   Navigator.push(...)
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => PracticeSpeaking(),
+                    ));
+                  } else {
+                    // Handle other activities or show a message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Activity not implemented yet!')),
+                    );
                   }
                 },
                 child: Container(

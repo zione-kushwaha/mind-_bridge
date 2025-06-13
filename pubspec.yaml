@@ -48,6 +48,7 @@ dependencies:
   flutter_tts: ^4.2.3
   palette_generator: ^0.3.3+7
   confetti: ^0.8.0
+  speech_to_text: ^7.0.0
 
 dev_dependencies:
   flutter_test:

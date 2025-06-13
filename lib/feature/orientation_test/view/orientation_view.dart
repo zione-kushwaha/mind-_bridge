@@ -51,8 +51,8 @@ class _OrientationViewState extends ConsumerState<OrientationView>
 
   Future<void> _speak(String text) async {
     await flutterTts.setLanguage("en-US");
-    await flutterTts.setPitch(1.2);
-    await flutterTts.setSpeechRate(0.8);
+    await flutterTts.setPitch(0.1);
+    await flutterTts.setSpeechRate(2); // Slower speech rate
     await flutterTts.speak(text);
   }
 
@@ -809,13 +809,12 @@ class _OrientationViewState extends ConsumerState<OrientationView>
                 );
               },
             ),
-            
           ],
         ),
-     
-      SizedBox(height: 0.04*screenHeight,),
+      
         
         // Bottom controls
+        SizedBox(height: screenHeight * 0.04),
        
         
         // Action buttons
