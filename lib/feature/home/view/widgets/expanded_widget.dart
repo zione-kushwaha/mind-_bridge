@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mind_bridge/feature/learn_alphabets/view/learn_alphabet_view.dart';
 import 'package:mind_bridge/feature/orientation_test/view/orientation_view.dart';
 import 'package:mind_bridge/feature/text_reconization/view/text_view.dart';
 import '../../model/image_data.dart';
@@ -308,6 +309,7 @@ class _ExpandedContentWidgetState extends State<ExpandedContentWidget> with Sing
                     ));
                   //   Navigator.push(...)
                   } else if (widget.location.name == 'LEARN ALPHABETS') {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> LearnAlphabetView()));
                   //   Navigator.push(...)
                   } else if (widget.location.name == 'PRACTICE SPEAKING') {
                   //   Navigator.push(...)
