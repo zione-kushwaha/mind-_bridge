@@ -1,7 +1,19 @@
+buildscript {
+    extra["kotlin_version"] = "1.8.10"
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
+    }
+    
+    configurations.all {
+        resolutionStrategy {
+            force("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
+            force("org.jetbrains.kotlin:kotlin-stdlib:1.8.10")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10")
+        }
     }
 }
 
