@@ -44,6 +44,9 @@ dependencies:
   light_sensor: ^3.0.1
   screen_brightness: ^2.1.4
   flutter_svg: ^2.1.0
+  flutter_riverpod: ^2.6.1
+  flutter_tts: ^4.2.3
+  palette_generator: ^0.3.3+7
 
 dev_dependencies:
   flutter_test:
