@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mind_bridge/feature/ar_view/view/ar_view.dart';
 import 'package:mind_bridge/feature/learn_alphabets/view/learn_alphabet_view.dart';
 import 'package:mind_bridge/feature/orientation_test/view/orientation_view.dart';
 import 'package:mind_bridge/feature/practice_speaking/view/practice_speaking.dart';
@@ -62,8 +63,11 @@ class _ExpandedContentWidgetState extends State<ExpandedContentWidget> with Sing
     final theme = Theme.of(context);
     
     switch(widget.location.name) {
+
+
       case 'LEARN ALPHABETS':
         return [
+        
           _buildFeatureItem(
             icon: Icons.abc, 
             title: 'Learn the Alphabet',
@@ -317,7 +321,13 @@ class _ExpandedContentWidgetState extends State<ExpandedContentWidget> with Sing
                   Navigator.push(context, MaterialPageRoute(
                       builder: (context) => PracticeSpeaking(),
                     ));
-                  } else {
+                  }else if(widget.location.name == "AR"){
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => SimpleARScreen(),
+                    ));
+                  } 
+                  
+                  else {
                     // Handle other activities or show a message
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Activity not implemented yet!')),

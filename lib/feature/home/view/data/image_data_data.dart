@@ -1,6 +1,7 @@
 import '../../model/image_data.dart';
 
 List<imageData> locations = [
+
   imageData(
     name: 'LEARN ALPHABETS',
     urlImage: 'assets/first/2.png',
@@ -16,6 +17,14 @@ List<imageData> locations = [
     emoji: '🎤',
     recommendedAge: 6,
     skills: ['Speech', 'Pronunciation', 'Confidence'],
+  ),
+    imageData(
+    name: 'AR',
+    urlImage: 'assets/ar_view.png',
+    description: 'Learn with Augmented Reality!',
+    emoji: '🕶️',
+    recommendedAge: 4,
+    skills: ['Imagination', 'Creativity', 'Exploration'],
   ),
   imageData(
     name: 'SCAN TEXT',
