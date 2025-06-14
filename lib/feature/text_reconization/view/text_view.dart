@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import '../../reader/view/reader_screen.dart';
 
 class TextReconization extends StatefulWidget {
@@ -46,7 +48,6 @@ class _TextReconizationState extends State<TextReconization>
     _animationController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,16 +57,33 @@ class _TextReconizationState extends State<TextReconization>
         elevation: 0,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-            color: Color(0xFF7C4DFF)
+            gradient: LinearGradient(
+              colors: [Color(0xFF7C4DFF), Color(0xFF9E7BFF)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
         ),
-        title: const Text(
-          "Text Scanner",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.auto_stories, color: Colors.amber, size: 28),
+            SizedBox(width: 8),
+            Text(
+              "Magic Text Scanner",
+              style: GoogleFonts.fredoka(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          ],
         ),
         actions: [
           if (scannedText.isNotEmpty)
@@ -76,28 +94,61 @@ class _TextReconizationState extends State<TextReconization>
                   scannedText = "";
                   imageFile = null;
                 });
+                
+                // Show a fun snackbar
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      children: [
+                        Icon(Icons.delete_sweep, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          "Magic words erased!",
+                          style: GoogleFonts.fredoka(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    backgroundColor: Colors.deepPurple,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                );
               },
             ),
         ],
       ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _buildHeaderCard(),
-                  const SizedBox(height: 30),
-                  _buildImagePreview(),
-                  const SizedBox(height: 30),
-                  _buildActionButtons(),
-                  const SizedBox(height: 30),
-                  if (scannedText.isNotEmpty) _buildAnalyzeButton(),
-                ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFEFD1F9).withOpacity(0.7),  // Light purple
+              Color(0xFFE4F1FE).withOpacity(0.7),  // Light blue
+            ],
+          ),
+        ),
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _buildHeaderCard(),
+                    const SizedBox(height: 30),
+                    _buildImagePreview(),
+                    const SizedBox(height: 30),
+                    _buildActionButtons(),
+                    const SizedBox(height: 30),
+                    if (scannedText.isNotEmpty) _buildAnalyzeButton(),
+                  ],
+                ),
               ),
             ),
           ),

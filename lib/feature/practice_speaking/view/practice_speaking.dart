@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
-
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:lottie/lottie.dart';
 import 'repository/character_image_provider.dart';
 
 class PracticeSpeaking extends ConsumerStatefulWidget {
@@ -28,6 +29,11 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
   String _currentLetter = 'a';
   bool is_listening = false;
   bool isCorrect = false;
+  bool _showCelebration = false;
+  
+  // Animation controller for pulse effect
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
@@ -37,8 +43,18 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
-    )..repeat(reverse: false); // Auto-repeats the animation.
+    ); // We'll control animation start manually
+    
     _seupAnimation();
+    _speakCurrentLetter();
+  }
+
+  // Speak the current letter when page loads
+  void _speakCurrentLetter() async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1.0);
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.speak("Say the letter ${_currentLetter.toUpperCase()}");
   }
 
   /// This has to happen only once per app
@@ -46,20 +62,25 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
     _speechEnabled = await _speechToText.initialize();
     setState(() {});
   }
-
   void _startListening() async {
+    // Play a fun sound or animation to indicate listening is starting
+    setState(() {
+      is_listening = true;
+    });
+    
+    await flutterTts.speak("I'm listening");
+    
     await _speechToText.listen(
       onResult: _onSpeechResult,
       sampleRate: 1,
       partialResults: false,
     );
 
-    setState(() {
-      is_listening = true;
-    });
-
-    Future.delayed(Duration(seconds: 3), () {
-      _stopListening();
+    // Set timeout for listening
+    Future.delayed(Duration(seconds: 5), () {
+      if(is_listening) {
+        _stopListening();
+      }
     });
   }
 
@@ -78,7 +99,13 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
   }
 
   void _seupAnimation() {
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+    // Create a fun path animation that follows a parabolic arc
+    _animation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOutQuad,
+      ),
+    );
   }
 
   void _onScroll() {
@@ -97,26 +124,34 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
     _controller.dispose();
     super.dispose();
   }
-
   void _checkResult() {
     String first_letter =
         _lastWords.isNotEmpty ? _lastWords[0].toLowerCase() : '';
     if (first_letter == _currentLetter) {
       setState(() {
         isCorrect = true;
+        _showCelebration = true;
         _controller.reset();
         _controller.forward();
       });
 
+      // Play success sound
+      flutterTts.speak("Great job!");
+      
+      // Run animation once then move to next letter
       _controller.addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          _nextLetter();
+          Future.delayed(Duration(milliseconds: 1500), () {
+            _nextLetter();
+          });
         }
       });
     } else {
       setState(() {
         isCorrect = false;
       });
+      // Play gentle incorrect sound
+      flutterTts.speak("Let's try again!");
       _showIncorrectDialog();
     }
   }
@@ -124,58 +159,108 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
   void _showIncorrectDialog() {
     showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.red.shade100,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            side: BorderSide(color: Colors.red, width: 2),
-          ),
-          title: Row(
-            children: [
-              Icon(Icons.error_outline, color: Colors.red, size: 30),
-              SizedBox(width: 10),
-              Text(
-                'Incorrect',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.orange[100]!, Colors.orange[50]!],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.close, color: Colors.red, size: 50),
-              SizedBox(height: 10),
-              Text(
-                'Please try again!',
-                style: TextStyle(color: Colors.red.shade700, fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                  offset: Offset(0, 4),
                 ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+              ],
+              border: Border.all(
+                color: Colors.orange[300]!,
+                width: 3,
               ),
             ),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.orange[100],
+                      ),
+                      child: Icon(
+                        Icons.emoji_emotions,
+                        color: Colors.orange,
+                        size: 60,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Text(
+                  "Let's try again!",
+                  style: GoogleFonts.fredoka(
+                    fontSize: 24,
+                    color: Colors.orange[800],
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "You can do it! Say the letter '${_currentLetter.toUpperCase()}'",
+                  style: GoogleFonts.fredoka(
+                    fontSize: 18,
+                    color: Colors.orange[700],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 25),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    // Give them a second before starting to listen again
+                    Future.delayed(Duration(milliseconds: 500), () {
+                      _startListening();
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                    decoration: BoxDecoration(
+                     color:  Color(0xFF7C4DFF),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color:  Color(0xFF7C4DFF),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      "Try Again",
+                      style: GoogleFonts.fredoka(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -215,7 +300,7 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
                 Container(
                   padding: EdgeInsets.all(15),
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color:  Color(0xFF7C4DFF),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -324,27 +409,23 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    
                     GestureDetector(
                       onTap: () {
                         _startListening();
                       },
                       child: Container(
+                        height: 100,
+                        width: 100,
                         margin: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.4,
+                          left: MediaQuery.of(context).size.width * 0.2,
                         ),
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color:  Color(0xFF7C4DFF),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Text(
-                          'Speak',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: Icon(Icons.mic, color: Colors.white, size: 30),
                       ),
                     ),
                     // Spacer(),
@@ -372,28 +453,34 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
                                     MediaQuery.of(context).size.height * 0.15,
                               ),
                     ),
-                  ],
-                ),
-                // Spacer(),
-                GestureDetector(
+                     GestureDetector(
                   onTap: _nextLetter,
                   child: Container(
+                    height: 100,
+                    width: 100,
                     padding: EdgeInsets.all(10),
                     margin: EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color:  Color(0xFF7C4DFF),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
-                      'Next',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                    child: Center(
+                      child: Text(
+                        
+                        'Next',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
+                  ],
+                ),
+                // Spacer(),
+               
               ],
             ),
           );
