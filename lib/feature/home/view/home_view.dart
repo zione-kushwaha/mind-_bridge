@@ -3,6 +3,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mind_bridge/feature/task_view/features/home/presentation/screens/home_screen.dart';
 
 import 'widgets/templete_widget.dart';
 
@@ -89,27 +90,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           children: [
             <Widget>[
               templateWidget(),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      height: 200,
-                      child:  Lottie.network(
-                        'https://assets5.lottiefiles.com/packages/lf20_5tkzkblw.json',
-                        controller: _animationController,
-                        repeat: true,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    Text(
-                      'Games coming soon!',
-                      style: theme.textTheme.headlineMedium,
-                    ),
-                  ],
-                ),
-              ),
+              TaskView(),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

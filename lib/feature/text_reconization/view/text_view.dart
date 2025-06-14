@@ -56,11 +56,7 @@ class _TextReconizationState extends State<TextReconization>
         elevation: 0,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.teal.shade700, Colors.teal.shade400],
-            ),
+            color: Color(0xFF7C4DFF)
           ),
         ),
         title: const Text(
@@ -126,21 +122,21 @@ class _TextReconizationState extends State<TextReconization>
         ),
         child: Column(
           children: [
-            const Icon(Icons.text_fields, size: 40, color: Colors.teal),
+            const Icon(Icons.text_fields, size: 40, color: Color(0xFF7C4DFF)),
             const SizedBox(height: 10),
             Text(
               "Extract Text from Images",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.teal.shade800,
+                color: Color(0xFF7C4DFF),
               ),
             ),
             const SizedBox(height: 8),
             Text(
               "Capture or select an image to scan text",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.teal.shade600),
+              style: TextStyle(fontSize: 14, color: Color(0xFF7C4DFF)),
             ),
           ],
         ),
@@ -172,14 +168,14 @@ class _TextReconizationState extends State<TextReconization>
                         children: [
                           CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.teal.shade400,
+                              Color(0xFF7C4DFF),
                             ),
                           ),
                           const SizedBox(height: 15),
                           Text(
                             "Processing Image...",
                             style: TextStyle(
-                              color: Colors.teal.shade700,
+                              color: Color(0xFF7C4DFF),
                               fontSize: 16,
                             ),
                           ),
@@ -193,13 +189,13 @@ class _TextReconizationState extends State<TextReconization>
                         Icon(
                           Icons.image_search,
                           size: 80,
-                          color: Colors.teal.shade300,
+                          color: Color(0xFF7C4DFF),
                         ),
                         const SizedBox(height: 10),
                         Text(
                           "No image selected",
                           style: TextStyle(
-                            color: Colors.teal.shade500,
+                            color: Color(0xFF7C4DFF),
                             fontSize: 16,
                           ),
                         ),
@@ -219,14 +215,14 @@ class _TextReconizationState extends State<TextReconization>
         _buildIconButton(
           icon: Icons.photo_library,
           label: "Gallery",
-          color: Colors.teal.shade600,
+          color: Color(0xFF7C4DFF),
           onPressed: () => getImage(ImageSource.gallery),
         ),
         const SizedBox(width: 30),
         _buildIconButton(
           icon: Icons.camera_alt,
           label: "Camera",
-          color: Colors.teal.shade800,
+          color: Color(0xFF7C4DFF),
           onPressed: () => getImage(ImageSource.camera),
         ),
       ],
@@ -275,13 +271,13 @@ class _TextReconizationState extends State<TextReconization>
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.teal.shade600,
+          backgroundColor: Colors.red,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16),
           elevation: 5,
-          shadowColor: Colors.teal.shade200,
+          shadowColor: Colors.red.withOpacity(0.5),
         ),
         onPressed: () {
           Navigator.push(
