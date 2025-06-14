@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:math' as math;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:lottie/lottie.dart';
 import 'repository/character_image_provider.dart';
 
 class PracticeSpeaking extends ConsumerStatefulWidget {
@@ -465,8 +463,7 @@ class _PracticeSpeakingState extends ConsumerState<PracticeSpeaking>
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
-                      child: Text(
-                        
+                      child: Text(                        
                         'Next',
                         style: TextStyle(
                           color: Colors.white,

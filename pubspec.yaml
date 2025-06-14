@@ -52,6 +52,7 @@ dependencies:
   flutter_webview_pro: ^3.0.1+4
   webview_flutter: ^4.13.0
   awesome_dialog: ^3.2.1
+  ar_flutter_plugin_updated: ^0.0.1
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mind_bridge/feature/profile/profile_view.dart';
 import 'package:mind_bridge/feature/task_view/features/home/presentation/screens/home_screen.dart';
 
 import 'widgets/templete_widget.dart';
@@ -91,37 +92,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             <Widget>[
               templateWidget(),
               TaskView(),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundImage: AssetImage('assets/user1.png'),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Jeevan Kushwaha',
-                      style: theme.textTheme.headlineMedium,
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Learning Progress: 70%',
-                      style: theme.textTheme.bodyLarge,
-                    ),
-                    SizedBox(height: 16),
-                    LinearProgressIndicator(
-                      value: 0.7,
-                      backgroundColor: Colors.grey.shade300,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        theme.colorScheme.secondary,
-                      ),
-                      minHeight: 10,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ],
-                ),
-              ),
+              ProfileView()
+             
             ][currentPageIndex],
           ],
         ),
@@ -134,7 +106,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final theme = Theme.of(context);
     
     return ConvexAppBar(
-      style: TabStyle.fixed,
+      style: TabStyle.react,
       
       curve: Curves.easeInOut,
       shadowColor: Colors.black38,
@@ -143,7 +115,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       
       height: 60,
       elevation: 8,
-      cornerRadius: 20,
+    
       items: [
         TabItem(
           icon: FontAwesomeIcons.house,
